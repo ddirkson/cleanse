@@ -12,7 +12,7 @@ def traverse_nodes(root_node):
 
 def file_data(file_path):
     """
-    Parse the data from the specified file and return as string.
+    Parse data from the specified file and return as a string.
     """
     try:
         with open(file_path, 'r') as file:
@@ -27,8 +27,9 @@ def main(args):
     xml_string = ''
 
     if os.path.isdir(args.file_location):
-        for dir_file in os.listdir(args.file_location):
-            xml_string = file_data(dir_file)
+        for file_name in os.listdir(args.file_location):
+            if file_name.endswith('.xml'):
+                xml_string = file_data(file_name)
 
     xml_string = file_data(args.file_location)
     # root_node = etree.fromstring(xml_string)
