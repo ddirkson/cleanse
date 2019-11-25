@@ -14,13 +14,14 @@ def file_data(file_path):
     """
     Parse data from the specified file and return as a string.
     """
+    data = ''
     try:
         with open(file_path, 'r') as file:
-            print('file open')
+            data = file.read()
     except IOError:
         print('Error accessing file {}'.format(file_path))
 
-    return ''
+    return data
 
 
 def main(args):
