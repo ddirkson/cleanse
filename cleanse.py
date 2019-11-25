@@ -4,22 +4,46 @@ import argparse
 from lxml import etree
 
 
-def traverse_nodes(xml_string: str):
-    root_node = etree.fromstring(xml_string)
+def traverse_nodes(root_node):
     for node in root_node:
         print(node.text)
 
 
-def main():
-    pass
+def main(args):
+    print(args)
+    print(args.mapping_file)
+    # root_node = etree.fromstring(xml_string)
 
 
 def parse_args():
-    parser = argparse.ArgumentParser()
+    """
+    Basic argument parsing for running the file as a script.
+    """
+    parser = argparse.ArgumentParser(
+        description='Takes an input xml file/directory and replaces specified nodes with mock data.'
+        )
+
+    parser.add_argument(
+        'file_location',
+        help='File or directory to modify.'
+        )
+
+    parser.add_argument(
+        'mapping_file',
+        help='JSON file. Specifies functions to use when replacing xml nodes of interest.'
+        )
+
+    parser.add_argument(
+        '-r',
+        '--retain-original',
+        action='store_false',
+        help='Keep a copy of the original file. Default functionality is to alter in place.'
+        )
+
     arguments = parser.parse_args()
     return arguments
 
 
 if __name__ == '__main__':
     args = parse_args()
-    main(*args)
+    main(args)
