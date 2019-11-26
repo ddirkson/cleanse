@@ -6,6 +6,9 @@ from lxml import etree
 
 
 def traverse_nodes(root_node):
+    """
+    Loop through each xml node and perform data replacement operation
+    """
     for node in root_node:
         print(node.text)
 
@@ -25,15 +28,21 @@ def file_data(file_path):
 
 
 def main(args):
-    xml_string = ''
+    mapping_data = file_data(args.mapping_file)
+    if not mapping_data:
+        return
 
+    xml_string = ''
     if os.path.isdir(args.file_location):
         for file_name in os.listdir(args.file_location):
             if file_name.endswith('.xml'):
                 xml_string = file_data(file_name)
+                root_node = etree.fromstring(xml_string)
+                traverse_nodes(root_node)
 
     xml_string = file_data(args.file_location)
-    # root_node = etree.fromstring(xml_string)
+    root_node = etree.fromstring(xml_string)
+    traverse_nodes(root_node)
 
 
 def parse_args():
