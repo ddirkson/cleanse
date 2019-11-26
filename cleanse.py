@@ -17,6 +17,21 @@ class XMLCleanser():
         self._replacement_mapping = json.loads(mapping_data)
 
 
+
+    def cleanse_xml(self):
+        xml_string = ''
+        if os.path.isdir(args.file_location):
+            for file_name in os.listdir(args.file_location):
+                if file_name.endswith('.xml'):
+                    xml_string = self.file_data(file_name)
+                    root_node = etree.fromstring(xml_string)
+                    self.traverse_nodes(root_node)
+
+        xml_string = self.file_data(self._file_location)
+        root_node = etree.fromstring(xml_string)
+        self.traverse_nodes(root_node)
+
+
     @staticmethod
     def traverse_nodes(root_node):
         """
@@ -43,18 +58,7 @@ class XMLCleanser():
 
 def main(args):
     cleanser = XMLCleanser(args.file_location, args.mapping_file, args.retain_original)
-
-    # xml_string = ''
-    # if os.path.isdir(args.file_location):
-    #     for file_name in os.listdir(args.file_location):
-    #         if file_name.endswith('.xml'):
-    #             xml_string = file_data(file_name)
-    #             root_node = etree.fromstring(xml_string)
-    #             traverse_nodes(root_node)
-
-    # xml_string = file_data(args.file_location)
-    # root_node = etree.fromstring(xml_string)
-    # traverse_nodes(root_node)
+    cleanser.cleanse_xml()
 
 
 def parse_args():
