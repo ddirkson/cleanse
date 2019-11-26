@@ -6,14 +6,6 @@ import json
 from lxml import etree
 
 
-def traverse_nodes(root_node):
-    """
-    Loop through each xml node and perform data replacement operation
-    """
-    for node in root_node:
-        print(node.text)
-
-
 class XMLCleanser():
 
 
@@ -23,6 +15,15 @@ class XMLCleanser():
 
         mapping_data = self.file_data(mapping_file)
         self._replacement_mapping = json.loads(mapping_data)
+
+
+    @staticmethod
+    def traverse_nodes(root_node):
+        """
+        Loop through each xml node and perform data replacement operation
+        """
+        for node in root_node:
+            print(node.text)
 
 
     @staticmethod
