@@ -2,6 +2,7 @@
 
 import os
 import argparse
+import json
 from lxml import etree
 
 
@@ -13,36 +14,46 @@ def traverse_nodes(root_node):
         print(node.text)
 
 
-def file_data(file_path):
-    """
-    Parse data from the specified file and return as a string.
-    """
-    data = ''
-    try:
-        with open(file_path, 'r') as file:
-            data = file.read()
-    except IOError:
-        print('Error accessing file {}'.format(file_path))
+class XMLCleanser():
 
-    return data
+
+    def __init__(self, file_location, mapping_file, retain_original=False):
+        self._file_location = file_location
+        self._retain_original = retain_original
+
+        mapping_data = self.file_data(mapping_file)
+        self._replacement_mapping = json.loads(mapping_data)
+
+
+    @staticmethod
+    def file_data(file_path):
+        """
+        Parse data from the specified file and return as a string.
+        """
+        data = ''
+        try:
+            with open(file_path, 'r') as file:
+                data = file.read()
+        except IOError:
+            print('Error accessing file {}'.format(file_path))
+
+        return data
 
 
 def main(args):
-    mapping_data = file_data(args.mapping_file)
-    if not mapping_data:
-        return
+    cleanser = XMLCleanser(args.file_location, args.mapping_file, args.retain_original)
 
-    xml_string = ''
-    if os.path.isdir(args.file_location):
-        for file_name in os.listdir(args.file_location):
-            if file_name.endswith('.xml'):
-                xml_string = file_data(file_name)
-                root_node = etree.fromstring(xml_string)
-                traverse_nodes(root_node)
+    # xml_string = ''
+    # if os.path.isdir(args.file_location):
+    #     for file_name in os.listdir(args.file_location):
+    #         if file_name.endswith('.xml'):
+    #             xml_string = file_data(file_name)
+    #             root_node = etree.fromstring(xml_string)
+    #             traverse_nodes(root_node)
 
-    xml_string = file_data(args.file_location)
-    root_node = etree.fromstring(xml_string)
-    traverse_nodes(root_node)
+    # xml_string = file_data(args.file_location)
+    # root_node = etree.fromstring(xml_string)
+    # traverse_nodes(root_node)
 
 
 def parse_args():
