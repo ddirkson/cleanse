@@ -4,18 +4,20 @@ import os
 import argparse
 import json
 from lxml import etree
+from faker import Faker
 
 
 class XMLCleanser():
 
 
-    def __init__(self, file_path, mapping_file, retain_original=False):
+    def __init__(self, file_path, mapping_file, data_spoofer, retain_original=False):
         self._file_path = file_path
+        self._data_spoofer = data_spoofer
         self._retain_original = retain_original
+        self._data_cache = {}
 
         mapping_data = self.file_data(mapping_file)
         self._replacement_mapping = json.loads(mapping_data)
-
 
 
     def cleanse_xml(self):
@@ -25,20 +27,43 @@ class XMLCleanser():
                 if file_name.endswith('.xml'):
                     xml_string = self.file_data(file_name)
                     root_node = etree.fromstring(xml_string)
-                    self.traverse_nodes(root_node)
+                    self._traverse_nodes(root_node)
 
         xml_string = self.file_data(self._file_path)
         root_node = etree.fromstring(xml_string)
-        self.traverse_nodes(root_node)
+        self._traverse_nodes(root_node)
+        self.write_file(self._file_path, root_node, self._retain_original)
 
 
-    @staticmethod
-    def traverse_nodes(root_node):
+    def _traverse_nodes(self, root_node):
         """
         Loop through each xml node and perform data replacement operation
         """
         for node in root_node:
-            print(node.text)
+            if node.tag in self._replacement_mapping:
+                spoof_function = self._replacement_mapping[node.tag]
+                node.text = self._spoof_data(node.text, spoof_function)
+
+
+    def _spoof_data(self, value, spoof_function):
+        if value in self._data_cache:
+            return self._data_cache[value]
+
+        replacement_val = getattr(self._data_spoofer, spoof_function)()
+        self._data_cache[value] = replacement_val
+        return replacement_val
+
+    @staticmethod
+    def write_file(file_path, root_node, retain_original=False):
+        if retain_original:
+            file_path = file_path.replace('.xml', '_copy.xml')
+
+        try:
+            with open(file_path, 'w') as file:
+                data = etree.tostring(root_node, encoding='unicode')
+                file.write(data)
+        except IOError:
+            print('Error writing file {}'.format(file_path))
 
 
     @staticmethod
@@ -57,7 +82,8 @@ class XMLCleanser():
 
 
 def main(args):
-    cleanser = XMLCleanser(args.file_path, args.mapping_file, args.retain_original)
+    data_faker = Faker()
+    cleanser = XMLCleanser(args.file_path, args.mapping_file, data_faker, args.retain_original)
     cleanser.cleanse_xml()
 
 
