@@ -98,12 +98,12 @@ class XMLCleanser():
         return data
 
 
-def main(args):
+def main(file_path, mapping_file, retain_original=False):
     """
     Entry-point for the cleanse script.
     """
     data_faker = Faker()
-    cleanser = XMLCleanser(args.file_path, args.mapping_file, data_faker, args.retain_original)
+    cleanser = XMLCleanser(file_path, mapping_file, data_faker, retain_original)
     cleanser.cleanse_xml()
 
 
@@ -138,4 +138,4 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    main(args)
+    main(args.file_path, args.mapping_file, args.retain_original)
