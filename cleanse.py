@@ -8,7 +8,9 @@ from faker import Faker
 
 
 class XMLCleanser():
-
+    """
+    Class to replace xml data deemed sensitive or otherwise inappropriate for public viewing.
+    """
 
     def __init__(self, file_path, mapping_file, data_spoofer, retain_original=False):
         self._file_path = file_path
@@ -21,6 +23,11 @@ class XMLCleanser():
 
 
     def cleanse_xml(self):
+        """
+        Given a file path, a mapping file to specify replacement functions,
+        and a data spoofing class, loop through all relevant xml nodes and
+        replace them as necessary before writing the results to a file.
+        """
         xml_string = ''
         if os.path.isdir(args.file_path):
             for file_name in os.listdir(args.file_path):
@@ -37,7 +44,7 @@ class XMLCleanser():
 
     def _traverse_nodes(self, root_node):
         """
-        Loop through each xml node and perform data replacement operation
+        Loop through each xml node and perform data replacement operation.
         """
         for node in root_node:
             if node.tag in self._replacement_mapping:
@@ -46,6 +53,11 @@ class XMLCleanser():
 
 
     def _spoof_data(self, value, spoof_function):
+        """
+        Utilize our data spoofer to create a replacement value for the passed in value.
+        If we've replaced this value before, return the value from the data cache instead
+        so we keep things cohesive.
+        """
         if value in self._data_cache:
             return self._data_cache[value]
 
@@ -56,6 +68,10 @@ class XMLCleanser():
 
     @staticmethod
     def write_file(file_path, root_node, retain_original=False):
+        """
+        Write the passed in xml to the specified file path.
+        Writes to a new file if retain_original is true.
+        """
         if retain_original:
             file_path = file_path.replace('.xml', '_copy.xml')
 
@@ -83,6 +99,9 @@ class XMLCleanser():
 
 
 def main(args):
+    """
+    Entry-point for the cleanse script.
+    """
     data_faker = Faker()
     cleanser = XMLCleanser(args.file_path, args.mapping_file, data_faker, args.retain_original)
     cleanser.cleanse_xml()
