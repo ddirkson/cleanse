@@ -9,8 +9,8 @@ from lxml import etree
 class XMLCleanser():
 
 
-    def __init__(self, file_location, mapping_file, retain_original=False):
-        self._file_location = file_location
+    def __init__(self, file_path, mapping_file, retain_original=False):
+        self._file_path = file_path
         self._retain_original = retain_original
 
         mapping_data = self.file_data(mapping_file)
@@ -20,14 +20,14 @@ class XMLCleanser():
 
     def cleanse_xml(self):
         xml_string = ''
-        if os.path.isdir(args.file_location):
-            for file_name in os.listdir(args.file_location):
+        if os.path.isdir(args.file_path):
+            for file_name in os.listdir(args.file_path):
                 if file_name.endswith('.xml'):
                     xml_string = self.file_data(file_name)
                     root_node = etree.fromstring(xml_string)
                     self.traverse_nodes(root_node)
 
-        xml_string = self.file_data(self._file_location)
+        xml_string = self.file_data(self._file_path)
         root_node = etree.fromstring(xml_string)
         self.traverse_nodes(root_node)
 
@@ -57,7 +57,7 @@ class XMLCleanser():
 
 
 def main(args):
-    cleanser = XMLCleanser(args.file_location, args.mapping_file, args.retain_original)
+    cleanser = XMLCleanser(args.file_path, args.mapping_file, args.retain_original)
     cleanser.cleanse_xml()
 
 
@@ -70,7 +70,7 @@ def parse_args():
         )
 
     parser.add_argument(
-        'file_location',
+        'file_path',
         help='File or directory to modify.'
         )
 
