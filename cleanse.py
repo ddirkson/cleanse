@@ -53,13 +53,14 @@ class XMLCleanser():
         self._data_cache[value] = replacement_val
         return replacement_val
 
+
     @staticmethod
     def write_file(file_path, root_node, retain_original=False):
         if retain_original:
             file_path = file_path.replace('.xml', '_copy.xml')
 
         try:
-            with open(file_path, 'w') as file:
+            with open(file_path, 'w+') as file:
                 data = etree.tostring(root_node, encoding='unicode')
                 file.write(data)
         except IOError:
@@ -108,7 +109,7 @@ def parse_args():
     parser.add_argument(
         '-r',
         '--retain-original',
-        action='store_false',
+        action='store_true',
         help='Keep a copy of the original file. Default functionality is to alter in place.'
         )
 
