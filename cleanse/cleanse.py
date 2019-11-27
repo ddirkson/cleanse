@@ -107,7 +107,7 @@ class XMLCleanser():
         return data
 
 
-def main(file_path, mapping_file, retain_original=False):
+def cleanse(file_path, mapping_file, retain_original=False):
     """
     Entry-point for the cleanse script.
     """
@@ -147,4 +147,4 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    main(args.file_path, args.mapping_file, args.retain_original)
+    cleanse(args.file_path, args.mapping_file, args.retain_original)
