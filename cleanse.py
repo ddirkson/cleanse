@@ -61,7 +61,16 @@ class XMLCleanser():
         if value in self._data_cache:
             return self._data_cache[value]
 
-        replacement_val = getattr(self._data_spoofer, spoof_function)()
+        replacement_val = ''
+        try:
+            replacement_val = getattr(self._data_spoofer, spoof_function)()
+        except AttributeError:
+            print('{} is not a valid data spoofing method for {}. ' \
+                'Replacing value with empty string.'.format(
+                    spoof_function,
+                    self._data_spoofer.__class__
+                ))
+
         self._data_cache[value] = replacement_val
         return replacement_val
 
