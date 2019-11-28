@@ -28,20 +28,24 @@ class XMLCleanser():
         and a data spoofing class, loop through all relevant xml nodes and
         replace them as necessary before writing the results to a file.
         """
-        xml_string = ''
-        if os.path.isdir(args.file_path):
-            for file_name in os.listdir(args.file_path):
+        if os.path.isdir(self._file_path):
+            for file_name in os.listdir(self._file_path):
                 if file_name.endswith('.xml'):
-                    xml_string = self.file_data(file_name)
-                    root_node = etree.fromstring(xml_string)
-                    self._traverse_nodes(root_node)
-
-        xml_string = self.file_data(self._file_path)
-        root_node = etree.fromstring(xml_string)
-        self._traverse_nodes(root_node)
-        self.write_file(self._file_path, root_node, self._retain_original)
+                    self._process_file(file_name)
+        else:
+            self._process_file(self._file_path)
 
         print('Done cleaning XML!')
+
+
+    def _process_file(self, file_path):
+        """
+        Parse the xml and perform the data replacement.
+        """
+        xml_string = self.file_data(file_path)
+        root_node = etree.fromstring(xml_string)
+        self._traverse_nodes(root_node)
+        self.write_file(file_path, root_node, self._retain_original)
 
 
     def _traverse_nodes(self, root_node):
