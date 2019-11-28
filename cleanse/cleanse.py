@@ -65,7 +65,7 @@ class XMLCleanser():
         try:
             replacement_val = getattr(self._data_spoofer, spoof_function)()
         except AttributeError:
-            print('{} is not a valid data spoofing method for {}. ' \
+            print('[-] {} is not a valid data spoofing method for {}. ' \
                 'Replacing value with empty string.'.format(
                     spoof_function,
                     self._data_spoofer.__class__
@@ -89,7 +89,8 @@ class XMLCleanser():
                 data = etree.tostring(root_node, encoding='unicode')
                 file.write(data)
         except IOError:
-            print('Error writing file {}'.format(file_path))
+            print('[-] Error writing file {}'.format(file_path))
+            raise
 
 
     @staticmethod
@@ -102,7 +103,8 @@ class XMLCleanser():
             with open(file_path, 'r') as file:
                 data = file.read()
         except IOError:
-            print('Error accessing file {}'.format(file_path))
+            print('[-] Error reading file {}'.format(file_path))
+            raise
 
         return data
 
