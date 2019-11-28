@@ -41,6 +41,8 @@ class XMLCleanser():
         self._traverse_nodes(root_node)
         self.write_file(self._file_path, root_node, self._retain_original)
 
+        print('Done cleaning XML!')
+
 
     def _traverse_nodes(self, root_node):
         """
