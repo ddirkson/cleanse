@@ -18,7 +18,7 @@ class XMLCleanser():
         self._retain_original = retain_original
         self._data_cache = {}
 
-        mapping_data = self.file_data(mapping_file)
+        mapping_data = self.read_file(mapping_file)
         self._replacement_mapping = json.loads(mapping_data)
 
 
@@ -42,7 +42,7 @@ class XMLCleanser():
         """
         Parse the xml and perform the data replacement.
         """
-        xml_string = self.file_data(file_path)
+        xml_string = self.read_file(file_path)
         root_node = etree.fromstring(xml_string)
         self._traverse_nodes(root_node)
         self.write_file(file_path, root_node, self._retain_original)
@@ -100,7 +100,7 @@ class XMLCleanser():
 
 
     @staticmethod
-    def file_data(file_path):
+    def read_file(file_path):
         """
         Parse data from the specified file and return as a string.
         """
