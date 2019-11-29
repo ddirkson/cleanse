@@ -22,7 +22,7 @@ class XMLCleanser():
         self._replacement_mapping = json.loads(mapping_data)
 
 
-    def cleanse_xml(self):
+    def cleanse(self):
         """
         Given a file path, a mapping file to specify replacement functions,
         and a data spoofing class, loop through all relevant xml nodes and
@@ -115,13 +115,13 @@ class XMLCleanser():
         return data
 
 
-def cleanse(file_path, mapping_file, retain_original=False):
+def cleanse_xml(file_path, mapping_file, retain_original=False):
     """
     Entry-point for the cleanse script.
     """
     data_faker = Faker()
     cleanser = XMLCleanser(file_path, mapping_file, data_faker, retain_original)
-    cleanser.cleanse_xml()
+    cleanser.cleanse()
 
 
 def parse_args():
@@ -155,4 +155,4 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    cleanse(args.file_path, args.mapping_file, args.retain_original)
+    cleanse_xml(args.file_path, args.mapping_file, args.retain_original)
