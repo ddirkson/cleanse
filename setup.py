@@ -13,7 +13,7 @@ setuptools.setup(
     author_email='sodakdoubled@gmail.com',
     url='https://github.com/SodakDoubleD/cleanse',
     download_url='https://github.com/SodakDoubleD/cleanse/',
-    keywords=['XML', 'data spoofing', 'python', 'CLI tool'],
+    keywords='XML data-spoofing python CLI tool',
     packages=setuptools.find_packages(),
     classifiers=[
         'Programming Language :: Python :: 3',
