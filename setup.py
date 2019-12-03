@@ -25,4 +25,7 @@ setuptools.setup(
         'Faker',
         'lxml'
     ],
+    extras_require={
+        'dev': ['pytest'],
+    }
 )
